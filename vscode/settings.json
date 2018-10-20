@@ -1,0 +1,19 @@
+{
+    "window.zoomLevel": 0,
+    "extensions.autoUpdate": true,
+    "telemetry.enableTelemetry": false,
+    "editor.formatOnSave": false,
+    "materialTheme.autoApplyIcons": true,
+    "workbench.colorTheme": "Shades of Purple",
+    "materialTheme.fixIconsRunning": false,
+    "workbench.iconTheme": "eq-material-theme-icons-palenight",
+    "materialTheme.accentPrevious": "Yellow",
+    "materialTheme.accent": "Cyan",
+    "editor.lineHeight": 24,
+    "editor.fontLigatures": true,
+    "explorer.decorations.badges": false,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "window.titleBarStyle": "custom",
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\cmd.exe",
+    "workbench.startupEditor": "welcomePage"
+}

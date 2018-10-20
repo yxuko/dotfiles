@@ -1,0 +1,6 @@
+caarlos0/ports
+supercrabtree/k
+djui/alias-tips
+mafredri/zsh-async
+caarlos0/zsh-mkc
+wbinglee/zsh-wakatime
