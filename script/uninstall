@@ -1,0 +1,49 @@
+#!/bin/sh
+#
+
+backupdir=$(pwd)
+
+uninstall() {
+    if [ -f $backupdir/check-backup.txt ]; then
+        for dots in "${dotfiles[@]}"
+        do
+            rm -rf ~/${dots}
+            cp -rf $backupdir/${dots} ~/ &> /dev/null
+            rm -rf $backupdir/${dots}
+        done
+
+        for dots_conf in "${dotfiles_config[@]//./}"
+        do
+            rm -rf ~/.config/$dots_conf
+            cp -rf $backupdir/.config/${dots_conf} ~/.config &> /dev/null
+            rm -rf $backupdir/.config/${dots_conf}
+        done
+
+        # Save old config in backup directory with Git.
+        cd $backupdir &> /dev/null
+        git add -u &> /dev/null
+        git add . &> /dev/null
+        git commit -m "Restore original config on `date '+%Y-%m-%d %H:%M'`" &> /dev/null
+    fi
+
+    if ! [ -f $backupdir/check-backup.txt ]; then
+        echo -e $red"You have not installed this dotfiles yet."$white >&2
+    else
+        echo -e $blue"Your old config has been restored!\n"$white >&2
+        echo "Thanks for using my dotfiles." >&2
+        echo "Enjoy your next journey!" >&2
+    fi
+
+    rm -rf $backupdir/check-backup.txt
+}
+
+main() {
+    if [ -d ~/.dotfiles ]; then
+        fail "The '~/.dotfiles' folder doesn't exists!"
+        exit 1
+    else
+        uninstall
+    fi
+}
+
+main

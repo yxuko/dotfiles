@@ -1,41 +1,161 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #
-# Run all dotfiles installers.
-set -eo pipefail
+# bootstrap installs things.
 
-install_pkg() {
-  if test "$(which brew)"; then
-    brew install "$@"
-  fi
+source ./lib/echo.sh
+
+cd "$(dirname "$0")/.."
+DOTFILES_ROOT=$(pwd -P)
+
+set -e
+
+setup_gitconfig() {
+  action "Setup Git Credential"
+	# if there is no user.email, we'll assume it's a new machine/setup and ask it
+	if [ -z "$(git config --global --get user.email)" ]; then
+    bot " - What is your Git author name ?"
+		read -r user_name
+    bot " - What is your Git author email ?"
+		read -r user_email
+
+		git config --global user.name "$user_name"
+		git config --global user.email "$user_email"
+	elif [ "$(git config --global --get dotfiles.managed)" != "true" ]; then
+		# if user.email exists, let's check for dotfiles.managed config. If it is
+		# not true, we'll backup the gitconfig file and set previous user.email and
+		# user.name in the new one
+		user_name="$(git config --global --get user.name)"
+		user_email="$(git config --global --get user.email)"
+		mv ~/.gitconfig ~/.gitconfig.backup
+		success "moved ~/.gitconfig to ~/.gitconfig.backup"
+		git config --global user.name "$user_name"
+		git config --global user.email "$user_email"
+	else
+		# otherwise this gitconfig was already made by the dotfiles
+		info "already managed by dotfiles"
+	fi
+	# include the gitconfig.local file
+	git config --global include.path ~/.gitconfig.local
+	# finally make git knows this is a managed config already, preventing later
+	# overrides by this script
+	git config --global dotfiles.managed true
+  success "Git Credential has been configured !"
 }
 
-check_dependencies() {
-  if test ! "$(which brew)"; then
-    if test "$(uname)" = "Darwin"; then
-      echo "  Installing Homebrew for you."
-      ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    else
-      echo "  You are not running a macOS"
-      exit 1
+link_file () {
+  local src=$1 dst=$2
+  # shellcheck disable=SC1007
+  local overwrite= backup= skip=
+  local action=
+
+  if [ -f "$dst" ] || [ -d "$dst" ] || [ -L "$dst" ]
+  then
+
+    if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]
+    then
+      # shellcheck disable=SC2086,SC2155
+      local currentSrc="$(readlink $dst)"
+
+      if [ "$currentSrc" == "$src" ]
+      then
+
+        skip=true;
+
+      else
+
+        bot "File already exists: $dst ($(basename "$src")), What do you want to do?\n\
+        [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
+        read -n 1 action
+
+        case "$action" in
+          o )
+            overwrite=true;;
+          O )
+            overwrite_all=true;;
+          b )
+            backup=true;;
+          B )
+            backup_all=true;;
+          s )
+            skip=true;;
+          S )
+            skip_all=true;;
+          * )
+            ;;
+        esac
+
+      fi
+
+    fi
+
+    overwrite=${overwrite:-$overwrite_all}
+    backup=${backup:-$backup_all}
+    skip=${skip:-$skip_all}
+
+    if [ "$overwrite" == "true" ]
+    then
+      rm -rf "$dst"
+      success "Removed $dst"
+    fi
+
+    if [ "$backup" == "true" ]
+    then
+      mv "$dst" "${dst}.backup"
+      success "Moved $dst to ${dst}.backup"
+    fi
+
+    if [ "$skip" == "true" ]
+    then
+      success "Skipped $src"
     fi
   fi
-  if test ! "$(which git)"; then
-    install_pkg git
-  fi
-  if test ! "$(which zsh)"; then
-    install_pkg zsh
+
+  if [ "$skip" != "true" ]  # "false" or empty
+  then
+    ln -s "$1" "$2"
+    success "Linked $1 to $2"
   fi
 }
 
-main() {
-  if [ -d ~/.dotfiles ]; then
-    echo "The '~/.dotfiles' folder already exists, please, backup it and run this again!"
-    exit 1
-  fi
-  check_dependencies
-  git clone --recursive https://github.com/marceldiass/dotfiles ~/.dotfiles
-  cd ~/.dotfiles
-  bash script/bootstrap
-  echo "All done! Please, restart your terminal session!"
+link_dotfiles () {
+  action "Installing dotfiles"
+
+	find -H "$DOTFILES_ROOT" -maxdepth 3 -name '*.symlink' -not -path '*.git*' |
+		while read -r src; do
+			dst="$HOME/.$(basename "${src%.*}")"
+			link_file "$src" "$dst"
+		done
 }
-main
+
+install_apps() {
+  action "Installing Applications"
+  if ./script/apps; then
+    success "Applications installed"
+  else
+    fail "Error installing Applications"
+  fi
+  ./bin/dot
+}
+
+find_zsh() {
+  if which zsh >/dev/null 2>&1 && grep "$(which zsh)" /etc/shells >/dev/null; then
+    which zsh
+  else
+    echo "/bin/zsh"
+  fi
+}
+
+setup_zsh() {
+  action "Setting ZSH as Default Shell"
+  zsh="$(find_zsh)"
+  which chsh > /dev/null 2>&1 &&
+  chsh -s "$zsh" &&
+  success "$zsh $("$zsh" --version) has been set as default shell"
+}
+
+setup_gitconfig
+link_dotfiles
+setup_zsh
+install_apps
+
+success "New dotfiles is installed!"

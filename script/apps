@@ -1,0 +1,75 @@
+#!/bin/sh
+
+#
+# update sources
+#
+apt update
+
+#
+# install staff
+#
+apt install \
+  `# default for many other things` \
+  build-essential \
+  autoconf \
+  make \
+  cmake \
+  `# interactive processes viewer` \
+  htop \
+  `# mysql processes viewer` \
+  mytop \
+  `# fonts also "non-free"-fonts` \
+  `# -- you need "multiverse" || "non-free" sources in your "source.list" -- ` \
+  fontconfig \
+  `# trace everything` \
+  strace \
+  `# get files from web` \
+  wget \
+  curl \
+  `# repo-tools`\
+  git \
+  `# usefull tools` \
+  nodejs \
+  npm \
+  ruby-full \
+  python \
+  python-pip \
+  python-dev \
+  `# install python-pygments for json print` \
+  python-pygments
+
+#
+# upgrade staff
+#
+sudo apt upgrade
+
+#
+# install node.js without deb-files e.g. for Debian - stable
+#
+sudo apt install -g nodejs
+sudo apt install -g npm
+
+#
+# fixing nodejs for ubuntu
+#
+ln -s /usr/bin/nodejs /usr/bin/node
+
+#
+# NPM packages
+#
+npm install -g npm
+npm install -g yarn
+npm update -g
+
+yarn add global diff-so-fancy
+yarn add global bower
+yarn add global grunt-cli
+yarn add global grunt-init
+yarn add global yo
+yarn add global np
+yarn add global npm-name
+yarn add global fkill
+yarn add global prettier
+
+# clean downloaded and already installed packages
+apt -v clean

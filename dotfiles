@@ -1,0 +1,97 @@
+#!/bin/sh
+#
+# Run all dotfiles installers.
+set -eo pipefail
+
+source ./lib/echo.sh
+
+usage_instructions() {
+    prog=$(basename "$0")
+    echo "Usage: $prog [-option]" >&2
+    echo "" >&2
+    echo "Options:" >&2
+    echo "    --help    Print this message" >&2
+    echo "    -i        Install Dotfiles" >&2
+    echo "    -r        Restore Old Dotfiles" >&2
+    echo "    -u        Update Dotfiles" >&2
+}
+
+backup() {
+    if ! [ -f $backupdir/check-backup.txt ]; then
+        mkdir -p $backupdir/.config
+        cd $backupdir
+        touch check-backup.txt
+
+        # Backup to ~/.dotfiles.orig
+        for dots in "${dotfiles[@]}"
+        do
+            /bin/cp -rf ~/${dots} $backupdir &> /dev/null
+        done
+
+        # Backup some folder in ~/.config to ~/.dotfiles.orig/.config
+        for dots_conf in "${dotfiles_config[@]//./}"
+        do
+            /bin/cp -rf ~/.config/${dots_conf} $backupdir/.config &> /dev/null
+        done
+
+        # Backup again with Git.
+        git init &> /dev/null
+        git add -u &> /dev/null
+        git add . &> /dev/null
+        git commit -m "Backup original config on `date '+%Y-%m-%d %H:%M'`" &> /dev/null
+
+        # Output.
+        echo -e $blue"Your config is backed up in "$backupdir"\n" >&2
+        echo -e $red"Please do not delete check-backup.txt in .dotfiles.orig folder."$white >&2
+        echo -e "It's used to backup and restore your old config.\n" >&2
+    fi
+}
+
+check_dependencies() {
+  if test ! "$(which brew)"; then
+    if test "$(uname)" = "Darwin"; then
+      ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" &
+      running "Installing Homebrew for you."
+    fi
+  fi
+  if test ! "$(which git)"; then
+    sudo apt install git
+  fi
+  if test ! "$(which zsh)"; then
+    sudo apt install zsh
+  fi
+}
+
+main() {
+  if [[ -z "$1" ]] || [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
+      printusage
+      exit 0
+  fi
+
+  case "$1" in
+      -i)
+          if [ -d ~/.dotfiles ]; then
+            warning "The '~/.dotfiles' folder already exists, please, backup it and run this again!"
+            exit 1
+          fi
+          check_dependencies
+          git clone --recursive https://github.com/yxuko/dotfiles ~/.dotfiles
+          cd ~/.dotfiles
+          bash script/install
+          success "All done! Please, restart your terminal session!"
+          ;;
+      -r)
+          cd ~/.dotfiles
+          bash script/uninstall
+          ;;
+      -u)
+          cd ~/.dotfiles
+          bash bin/update
+          ;;
+      *)
+          fail "Command not found" >&2
+          exit 1
+  esac
+}
+
+main
