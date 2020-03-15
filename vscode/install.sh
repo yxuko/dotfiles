@@ -12,7 +12,7 @@ if command -v code >/dev/null; then
 	ln -sf "$DOTFILES/vscode/snippets" "$VSCODE_HOME/User/snippets"
 
 	# from `code --list-extensions`
-  while read -r module; do
-	code --install-extension "$module" || true
+  	while read -r module; do
+		code --install-extension "$module" || true
 	done <"$DOTFILES/vscode/extensions.txt"
 fi
