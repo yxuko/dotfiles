@@ -1,4 +1,5 @@
 #!/bin/sh
-alias src='cd ~/Code'
-alias blog='cd ~/Code/marceldiass.github.io'
-alias wildfly='cd /Applications/wildfly'
+alias dl='cd ~/Downloads; la'
+alias doc='cd ~/Documents; la'
+alias docs='cd ~/Documents; la'
+alias tmp='cd ~/Temporary; la'
