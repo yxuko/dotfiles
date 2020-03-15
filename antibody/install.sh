@@ -1,7 +1,9 @@
 #!/bin/sh
-if [ "$(uname -s)" != "Darwin" ]; then
-  exit 0
+if command -v brew >/dev/null 2>&1; then
+	brew tap | grep -q 'getantibody/tap' || brew tap getantibody/tap
+	brew install antibody
+else
+	curl -sL https://git.io/antibody | sudo sh -s -- -b /usr/local/bin
 fi
-antibody bundle < "$ZSH/antibody/bundles.txt" > ~/.antibody_bundles.txt
-antibody bundle yxuko/vega >> ~/.antibody_bundles.txt
-antibody bundle < "$ZSH/antibody/bundle_zsh.txt" >> ~/.antibody_bundles.txt
+antibody bundle <"$DOTFILES/antibody/bundles.txt" >~/.zsh_plugins.sh
+antibody update
