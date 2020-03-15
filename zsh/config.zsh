@@ -2,22 +2,29 @@
 export LSCOLORS='exfxcxdxbxegedabagacad'
 export CLICOLOR=true
 
-fpath=($ZSH/functions $fpath)
+fpath=($DOTFILES/functions $fpath)
 
-autoload -U "$ZSH"/functions/*(:t)
+autoload -U "$DOTFILES"/functions/*(:t)
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+autoload -U edit-command-line
 
+# History.
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
+HIST_STAMPS="yyyy-mm-dd"
 
 # don't nice background tasks
 setopt NO_BG_NICE
 setopt NO_HUP
-setopt NO_LIST_BEEP
+setopt NO_BEEP
 # allow functions to have local options
 setopt LOCAL_OPTIONS
 # allow functions to have local traps
 setopt LOCAL_TRAPS
+# share history between sessions ???
+setopt SHARE_HISTORY
 # add timestamps to history
 setopt EXTENDED_HISTORY
 setopt PROMPT_SUBST
@@ -38,69 +45,43 @@ setopt HIST_EXPIRE_DUPS_FIRST
 # dont ask for confirmation in rm globs*
 setopt RM_STAR_SILENT
 
-zle -N newtab
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+zle -N edit-command-line
 
-if [[ ! -z "$+terminfo[smkx]" ]] && [[ ! -z "$+terminfo[rmkx]" ]]; then
-  function zle-line-init() {
-    echoti smkx
-  }
-  function zle-line-finish() {
-    echoti rmkx
-  }
-  zle -N zle-line-init
-  zle -N zle-line-finish
-fi
+# fuzzy find: start to type
+bindkey "$terminfo[kcuu1]" up-line-or-beginning-search
+bindkey "$terminfo[kcud1]" down-line-or-beginning-search
+bindkey "$terminfo[cuu1]" up-line-or-beginning-search
+bindkey "$terminfo[cud1]" down-line-or-beginning-search
 
-# Use emacs key bindings
-bindkey -e
+# backward and forward word with option+left/right
+bindkey '^[^[[D' backward-word
+bindkey '^[b' backward-word
+bindkey '^[^[[C' forward-word
+bindkey '^[f' forward-word
 
-# [Ctrl-r] - Search backward incrementally for a specified string.
-# The string may begin with ^ to anchor the search to the beginning of the line.
-bindkey '^r' history-incremental-search-backward
-# [PageUp] - Up a line of history
-if [[ ! -z "$terminfo[kpp]" ]]; then
-  bindkey "$terminfo[kpp]" up-line-or-history
-fi
-# [PageDown] - Down a line of history
-if [[ ! -z "$terminfo[knp]" ]]; then
-  bindkey "$terminfo[knp]" down-line-or-history
-fi
-# start typing + [Up-Arrow] - fuzzy find history forward
-if [[ ! -z "$terminfo[kcuu1]" ]]; then
-  bindkey "$terminfo[kcuu1]" history-substring-search-up
-fi
-# start typing + [Down-Arrow] - fuzzy find history backward
-if [[ ! -z "$terminfo[kcud1]" ]]; then
-  bindkey "$terminfo[kcud1]" history-substring-search-down
-fi
-if [[ ! -z "$terminfo[khome]" ]]; then
-  # [Home] - Go to beginning of line
-  bindkey "$terminfo[khome]" beginning-of-line
-  # OPTION+left
-  bindkey '[D' beginning-of-line
-fi
-if [[ ! -z "$terminfo[kend]" ]]; then
-  # [End] - Go to end of line
-  bindkey "$terminfo[kend]"  end-of-line
-  # OPTION+right
-  bindkey '[C' end-of-line
-fi
+# to to the beggining/end of line with fn+left/right or home/end
+bindkey "${terminfo[khome]}" beginning-of-line
+bindkey '^[[H' beginning-of-line
+bindkey "${terminfo[kend]}" end-of-line
+bindkey '^[[F' end-of-line
 
-# [Ctrl-RightArrow] - move forward one word
-bindkey '^[[1;5C' forward-word
-# [Ctrl-LeftArrow] - move backward one word
-bindkey '^[[1;5D' backward-word
-# [Shift-Tab] - move through the completion menu backwards
-if [[ ! -z "$terminfo[kcbt]" ]]; then
-  bindkey "$terminfo[kcbt]" reverse-menu-complete
-fi
-# [Backspace] - delete backward
+# delete char with backspaces and delete
+bindkey '^[[3~' delete-char
 bindkey '^?' backward-delete-char
-# [Delete] - delete forward
-if [[ ! -z "$terminfo[kdch1]" ]]; then
-  bindkey "$terminfo[kdch1]" delete-char
+
+# delete word with ctrl+backspace
+bindkey '^[[3;5~' backward-delete-word
+# bindkey '^[[3~' backward-delete-word
+
+# edit command line in $EDITOR
+bindkey '^e' edit-command-line
+
+# search history with fzf if installed, default otherwise
+if test -d /usr/local/opt/fzf/shell; then
+	# shellcheck disable=SC1091
+	. /usr/local/opt/fzf/shell/key-bindings.zsh
 else
-  bindkey "^[[3~" delete-char
-  bindkey "^[3;5~" delete-char
-  bindkey "\e[3~" delete-char
+	bindkey '^R' history-incremental-search-backward
 fi
