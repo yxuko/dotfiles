@@ -16,26 +16,6 @@ err()
 }
 
 # -------------------------------------------------------------------
-# cd: this will overwrite the default "cd"-command
-cd()
-{
-  if [[ "x$*" == "x..." ]]; then
-    cd ../..
-  elif [[ "x$*" == "x...." ]]; then
-    cd ../../..
-  elif [[ "x$*" == "x....." ]]; then
-    cd ../../../..
-  elif [[ "x$*" == "x......" ]]; then
-    cd ../../../../..
-  elif [ -d ~/.autoenv ]; then
-    source ~/.autoenv/activate.sh
-    autoenv_cd "$@"
-  else
-    builtin cd "$@"
-  fi
-}
-
-# -------------------------------------------------------------------
 # cdo: cd into the previous (old) working directory
 cdo()
 {
