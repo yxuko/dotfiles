@@ -1,33 +1,18 @@
 #!/bin/sh
-if test "$(which code)"; then
+if command -v code >/dev/null; then
 	if [ "$(uname -s)" = "Darwin" ]; then
 		VSCODE_HOME="$HOME/Library/Application Support/Code"
 	else
 		VSCODE_HOME="$HOME/.config/Code"
 	fi
+	mkdir -p "$VSCODE_HOME/User"
+
+	ln -sf "$DOTFILES/vscode/settings.json" "$VSCODE_HOME/User/settings.json"
+	ln -sf "$DOTFILES/vscode/keybindings.json" "$VSCODE_HOME/User/keybindings.json"
+	ln -sf "$DOTFILES/vscode/snippets" "$VSCODE_HOME/User/snippets"
 
 	# from `code --list-extensions`
-	exts="
-      ahmadawais.shades-of-purple
-      dbaeumer.vscode-eslint
-      Equinusocio.vsc-material-theme
-      felixfbecker.php-debug
-      felixfbecker.php-intellisense
-      felixfbecker.php-pack
-      lamartire.git-indicators
-      ms-python.python
-      ms-vscode.sublime-keybindings
-      robinbentley.sass-indented
-      yxuko.vscode-altair
-      wwm.better-align
-      esbenp.prettier-vscode
-      CoenraadS.bracket-pair-colorizer-2
-      formulahendry.auto-close-tag
-      formulahendry.auto-rename-tag
-  "
-
-	for ext in $exts; do
-		code --install-extension "$ext" || true
-	done
-
+  while read -r module; do
+	code --install-extension "$module" || true
+	done <"$DOTFILES/vscode/extensions.txt"
 fi

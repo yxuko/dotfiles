@@ -1,0 +1,17 @@
+CoenraadS.bracket-pair-colorizer-2
+dbaeumer.vscode-eslint
+Equinusocio.vsc-material-theme
+esbenp.prettier-vscode
+felixfbecker.php-debug
+felixfbecker.php-intellisense
+felixfbecker.php-pack
+formulahendry.auto-close-tag
+formulahendry.auto-rename-tag
+lamartire.git-indicators
+mauve.terraform
+ms-python.python
+ms-vscode.sublime-keybindings
+pnp.polacode
+quicktype.quicktype
+robinbentley.sass-indented
+wwm.better-align
