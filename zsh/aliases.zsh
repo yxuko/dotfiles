@@ -1,5 +1,7 @@
 #!/bin/sh
 alias reload!='exec "$SHELL" -l'
 
-# Aliases.
-source ~/.aliases
+# User Aliases.
+if [ -f ~/.aliases ]; then
+    source ~/.aliases
+fi
