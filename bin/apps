@@ -57,7 +57,6 @@ ln -s /usr/bin/nodejs /usr/bin/node
 #
 # NPM packages
 #
-npm install -g npm
 npm install -g yarn
 npm update -g
 
