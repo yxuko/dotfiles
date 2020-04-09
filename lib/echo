@@ -15,7 +15,7 @@ spinner()
     local pid=$1
     local delay=0.75
     local spinstr='|/-\'
-    while [ "$(ps a | awk '{print $1}' | grep -w $pid )" ]; do
+    while [ "$(ps a | awk '{print $1}' | grep -w "$pid" )" ]; do
         local temp=${spinstr#?}
         printf " [%c]  " "$spinstr"
         local spinstr=$temp${spinstr%"$temp"}
@@ -26,27 +26,26 @@ spinner()
 }
 
 action () {
-  echo -e "\n$YELLOW[ action ]:$RESET\n ⇒ $1..."
+	/bin/echo -e "\n$BLUE ⇒  $1...$RESET"
 }
 
 running () {
-    echo -en "$YELLOW ⇒ $RESET"$1": "
     spinner $!
-    echo ""
+    /bin/echo ""
 }
 
 bot () {
-  echo -e "\n$GREEN\[ ._. ]/$RESET - "$1
+	/bin/echo -e "\n$CYAN\[ ._. ]/ - $1$RESET"
 }
 
 success () {
-  echo -e "$GREEN[ OK ]$RESET "$1
+	/bin/echo -e "$GREEN [ OK ] $1 $RESET"
 }
 
 fail () {
-  echo -e "$RED[ FAILED ]$RESET "$1
+	/bin/echo -e "$RED [ FAILED ] $1 $RESET"
 }
 
 warning () {
-  echo -e "$YELLOW[ WARNING ]$RESET "$1
+	/bin/echo -e "$YELLOW [ WARNING ] $1 $RESET"
 }
