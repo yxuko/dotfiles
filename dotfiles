@@ -1,19 +1,18 @@
 #!/bin/sh
 #
 # Run all dotfiles installers.
-set -eo pipefail
 
-source ./lib/echo.sh
+. ./lib/echo
 
 usage_instructions() {
-    prog=$(basename "$0")
-    echo "Usage: $prog [-option]" >&2
-    echo "" >&2
-    echo "Options:" >&2
-    echo "    --help    Print this message" >&2
-    echo "    -i        Install Dotfiles" >&2
-    echo "    -r        Restore Old Dotfiles" >&2
-    echo "    -u        Update Dotfiles" >&2
+	bot "Usage: $0 [-option]"
+
+    echo "Options:"
+    echo "	-h    	  Print this message"
+    echo "	-i        Install Dotfiles"
+    echo "	-r        Restore Old Dotfiles"
+    echo "	-u        Update Dotfiles"
+    echo ""
 }
 
 backup() {
@@ -63,35 +62,29 @@ check_dependencies() {
 }
 
 main() {
-  if [[ -z "$1" ]] || [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
-      printusage
-      exit 0
-  fi
-
-  case "$1" in
-      -i)
-          if [ -d ~/.dotfiles ]; then
-            warning "The '~/.dotfiles' folder already exists, please, backup it and run this again!"
-            exit 1
-          fi
-          check_dependencies
-          git clone --recursive https://github.com/yxuko/dotfiles ~/.dotfiles
-          cd ~/.dotfiles
-          bash script/install
-          success "All done! Please, restart your terminal session!"
-          ;;
-      -r)
-          cd ~/.dotfiles
-          bash script/uninstall
-          ;;
-      -u)
-          cd ~/.dotfiles
-          bash bin/update
-          ;;
-      *)
-          fail "Command not found" >&2
-          exit 1
-  esac
+	case "$1" in
+		-i)
+			if [ -d ~/.dotfiles ]; then
+            	warning "The '~/.dotfiles' folder already exists, please, backup it and run this again!"
+            	exit 1
+          	fi
+          	check_dependencies
+			cd ~/.dotfiles
+          	bash script/install
+          	success "All done! Please, restart your terminal session!"
+          	;;
+      	-r)
+			cd ~/.dotfiles
+			bash script/uninstall
+			;;
+		-u)
+			cd ~/.dotfiles
+			bash bin/update
+			;;
+		*)
+			usage_instructions
+			exit 1
+	esac
 }
 
-main
+main "$@"
