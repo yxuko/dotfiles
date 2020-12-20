@@ -5,15 +5,6 @@ white='\e[0;37m'
 
 CMD="$1"
 
-printusage() {
-    prog=$(basename "$0")
-    echo "Usage: $prog [-option]" >&2
-    echo "" >&2
-    echo "Options:" >&2
-    echo "    --help    Print this message" >&2
-    echo "    -a        Update all packages" >&2
-}
-
 apt() {
     echo -e $magenta"\n Updating List System Packages... \n"$white
     sudo apt-get update

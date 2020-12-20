@@ -16,21 +16,19 @@ usage_instructions() {
 }
 
 backup() {
-    if ! [ -f $backupdir/check-backup.txt ]; then
-        mkdir -p $backupdir/.config
-        cd $backupdir
+	if ! [ -f "$backupdir"/check-backup.txt ]; then
+        mkdir -p "$backupdir"/.config
+        cd "$backupdir" || exit
         touch check-backup.txt
 
         # Backup to ~/.dotfiles.orig
-        for dots in "${dotfiles[@]}"
-        do
-            /bin/cp -rf ~/${dots} $backupdir &> /dev/null
+        for dots in "${dotfiles[@]}" do
+            /bin/cp -rf ~/"${dots}" "$backupdir" &> /dev/null
         done
 
         # Backup some folder in ~/.config to ~/.dotfiles.orig/.config
-        for dots_conf in "${dotfiles_config[@]//./}"
-        do
-            /bin/cp -rf ~/.config/${dots_conf} $backupdir/.config &> /dev/null
+        for dots_conf in "${dotfiles_config[@]//./}" do
+            /bin/cp -rf ~/.config/"${dots_conf}" "$backupdir"/.config &> /dev/null
         done
 
         # Backup again with Git.
@@ -40,25 +38,25 @@ backup() {
         git commit -m "Backup original config on `date '+%Y-%m-%d %H:%M'`" &> /dev/null
 
         # Output.
-        echo -e $blue"Your config is backed up in "$backupdir"\n" >&2
-        echo -e $red"Please do not delete check-backup.txt in .dotfiles.orig folder."$white >&2
+        echo -e "$blue""Your config is backed up in ""$backupdir""\n" >&2
+        echo -e "$red""Please do not delete check-backup.txt in .dotfiles.orig folder.""$white" >&2
         echo -e "It's used to backup and restore your old config.\n" >&2
     fi
 }
 
 check_dependencies() {
-  if test ! "$(which brew)"; then
-    if test "$(uname)" = "Darwin"; then
-      ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" &
-      running "Installing Homebrew for you."
-    fi
-  fi
-  if test ! "$(which git)"; then
-    sudo apt install git
-  fi
-  if test ! "$(which zsh)"; then
-    sudo apt install zsh
-  fi
+	if test ! "$(which brew)"; then
+		if test "$(uname)" = "Darwin"; then
+			ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" &
+			running "Installing Homebrew for you."
+		fi
+	fi
+	if test ! "$(which git)"; then
+		sudo apt install git
+	fi
+	if test ! "$(which zsh)"; then
+		sudo apt install zsh
+	fi
 }
 
 main() {
