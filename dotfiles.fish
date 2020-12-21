@@ -82,7 +82,7 @@ function link_file -d "links a file keeping a backup"
             [s]kip, [o]verwrite, [b]ackup?"
 		    read choice
 
-            switch ($choice)
+            switch $choice
             case o
                 set overwrite true
             case b
@@ -93,7 +93,7 @@ function link_file -d "links a file keeping a backup"
                 fail 'I told you to choose from [s]kip, [o]verwrite, [b]ackup !'
             end
 
-            if test $overwrite = "true"
+            if test '$overwrite' = "true"
                 rm -rf "$new"
                 warning "Removed $new"
                 mkdir -p (dirname $new)
@@ -102,7 +102,7 @@ function link_file -d "links a file keeping a backup"
                     or fail "Could not link $old to $new"
             end
 
-            if test $backup = "true"
+            if test '$backup' = "true"
                 mv $new $new.$backup
                     and success "Moved $new to $new.$backup"
                     or fail "failed to backup $new to $new.$backup"
@@ -112,7 +112,7 @@ function link_file -d "links a file keeping a backup"
                     or fail "Could not link $old to $new"
             end
 
-            if test $skip = "true"
+            if test '$skip' = "true"
                 warning "Skipped $new"
             end
 		end
@@ -136,7 +136,7 @@ end
 
 function setup_fish
 	action "Setting Fish as Default Shell"
-	if !test (which fish) = $SHELL
+	if ! test (which fish) = $SHELL
         chsh -s (which fish)
     end
 end
