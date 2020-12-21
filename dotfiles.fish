@@ -74,7 +74,7 @@ function link_file -d "links a file keeping a backup"
 			warning "Skipped $old"
 			return
 		else
-        	bot "File already exists: $new ($(basename "$old")), What do you want to do?\n
+        	bot "File already exists: $new, What do you want to do?\n
             [s]kip, [o]verwrite, [b]ackup?"
 		    read choice
 
