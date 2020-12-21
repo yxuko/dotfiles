@@ -1,7 +1,7 @@
 function extract -d "extract of compressed-files"
     echo $argv | read -l archive
     
-    if !$archive
+    if ! $archive
         exit 0
     end
 
