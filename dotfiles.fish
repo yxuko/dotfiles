@@ -175,7 +175,7 @@ if ! grep (command -v fish) /etc/shells
 end
 
 setup_fish
-	and success "$fish $("$fish" --version) has been set as default shell"
+	and success "$fish has been set as default shell"
 	or fail 'Coudn\'t set Fish as default shell'
 
 success 'All done! Dotfiles installed/updated!'
