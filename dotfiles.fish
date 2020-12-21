@@ -4,24 +4,28 @@
 
 set DOTFILES_ROOT (pwd -P)
 
-function info
-	echo [(set_color --bold blue) ' ⇒ ' (set_color normal)] $argv
+function action
+	echo (set_color --bold blue) ⇒ (set_color normal) $argv
 end
 
 function bot
-	echo [(set_color --bold cyan)\[ ._. ]/(set_color normal)] $argv
+	echo (set_color --bold cyan) \\[ '._.' ]/ (set_color normal) $argv
+end
+
+function info
+	echo (set_color --bold blue) [ 'INFO' ] (set_color normal) $argv
 end
 
 function success
-	echo (set_color --bold green)[ ' OK ' ](set_color normal) $argv
+	echo (set_color --bold green) [ 'OK' ] (set_color normal) $argv
 end
 
 function warning
-	echo (set_color --bold yellow)[ ' WARNING ' ](set_color normal) $argv
+	echo (set_color --bold yellow) [ 'WARNING' ] (set_color normal) $argv
 end
 
 function fail
-	echo (set_color --bold red)[ 'FAILED' ](set_color normal)] $argv
+	echo (set_color --bold red) [ ' FAILED ' ] (set_color normal) $argv
     exit 1
 end
 
@@ -36,9 +40,9 @@ function setup_gitconfig
 		read user_email
 
 		test -n $user_name
-			or echo 'Please inform the Git author name'
+			or info 'Please inform the Git author name'
 		test -n $user_email
-			or abort 'Please inform the Git author email'
+			or fail 'Please inform the Git author email'
 
 		git config --global user.name $user_name
 			and git config --global user.email $user_email
@@ -74,7 +78,7 @@ function link_file -d "links a file keeping a backup"
 			warning "Skipped $old"
 			return
 		else
-        	bot "File already exists: $new, What do you want to do?\n
+        	bot "File already exists: $new, What do you want to do?
             [s]kip, [o]verwrite, [b]ackup?"
 		    read choice
 
@@ -123,24 +127,22 @@ function install_dotfiles
 	end
 
 	link_file $DOTFILES_ROOT/bat/config $HOME/.config/bat/config backup
-		or abort bat
+		or fail bat
 	link_file $DOTFILES_ROOT/htop/htoprc $HOME/.config/htop/htoprc backup
-		or abort htoprc
+		or fail htoprc
 	link_file $DOTFILES_ROOT/ssh/config $HOME/.ssh/config local
-		or abort ssh
+		or fail ssh
 end
 
 function setup_fish
 	action "Setting Fish as Default Shell"
 	if !test (which fish) = $SHELL
         chsh -s (which fish)
-            and success set (fish --version) as the default shell
-            or abort 'set fish as default shell'
     end
 end
 
 curl -sL git.io/fisher | source && fisher install jorgebucaran/fisher
-	and success 'Fisher has been installed'
+	and success 'Fisher Installed'
 	or fail 'Fisher coudn\'t be installed!'
 
 setup_gitconfig
@@ -148,12 +150,12 @@ setup_gitconfig
 	or fail 'Git Credential Config Failed!'
 
 install_dotfiles
-	and success 'dotfiles'
-	or fail 'dotfiles'
+	and success 'Dotfiles Linked!'
+	or fail 'Dotfiles coudn\'t be linked!'
 
 mkdir -p ~/.config/fish/completions/
-	and success 'completions'
-	or fail 'completions'
+	and success 'Fish completions Prepared'
+	or fail 'Fish completions coudn\'t be prepared'
 
 for installer in */install.fish
 	$installer
@@ -175,7 +177,7 @@ if ! grep (command -v fish) /etc/shells
 end
 
 setup_fish
-	and success "$fish has been set as default shell"
+	and success set (fish --version) has been set as default shell
 	or fail 'Coudn\'t set Fish as default shell'
 
 success 'All done! Dotfiles installed/updated!'
