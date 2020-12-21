@@ -7,9 +7,9 @@ function extract -d "extract of compressed-files"
 
     if test -e $archive
         switch (lc $archive)
-        case *.tar.bz2)
+        case *.tar.bz2
           tar xvjf $archive
-        case *.tar.gz) 
+        case *.tar.gz
           tar xvzf $archive
         case *.bz2
           bunzip2 $archive
@@ -19,7 +19,7 @@ function extract -d "extract of compressed-files"
           gunzip $archive
         case *.tar
           tar xvf $archive
-        case *.tbz2)   
+        case *.tbz2
           tar xvjf $archive
         case *.tgz
           tar xvzf $archive
