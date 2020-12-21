@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-if !command -qs code
+if ! command -qs code
 	exit 0
 end
 
@@ -17,8 +17,8 @@ mkdir -p "$VSCODE_HOME/User"
 	and ln -sf "$DOTFILES/vscode/snippets" "$VSCODE_HOME/User/snippets"
 
 # from `code --list-extensions`
-cat $DOTFILES/vscode/extensions.txt | while read module
-	code --install-extension "$module"
-		and echo "vscode: $module"
-		or echo "vscode: failed to install $module"
+ cat $DOTFILES/vscode/extensions.txt | while read module
+ 	code --install-extension "$module"
+ 		and echo "vscode: $module"
+ 		or echo "vscode: failed to install $module"
 end

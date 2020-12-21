@@ -1,8 +1,6 @@
 #!/usr/bin/env fish
 
-
-
-if !command -qs nvim
+if ! command -qs nvim
 	curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	vim +'PlugUpdate | PlugInstall --sync' +qa
 else
