@@ -1,14 +1,11 @@
 # yxuko' dotfiles
 
-[![Build Status][tb]][tp]
-[![Powered by Antibody][ab]][ap]
+[![Powered by Fish][ab]][ap]
 
-> Config files for ZSH, Java, Ruby, Go, Editors, Terminals and more.
+> Config files for Fish, Java, Ruby, Go, Editors, Terminals and more.
 
 [ap]: https://github.com/getantibody/antibody
-[ab]: https://img.shields.io/badge/powered%20by-antibody-blue.svg?style=for-the-badge
-[tb]: https://img.shields.io/travis/yxuko/dotfiles/master.svg?style=for-the-badge
-[tp]: https://travis-ci.org/yxuko/dotfiles
+[ab]: https://img.shields.io/badge/powered%20by-fish-blue.svg?style=for-the-badge
 ## Installation
 
 ### Dependencies
@@ -18,7 +15,7 @@ First, make sure you have all those things installed:
 - `git`: to clone the repo
 - `curl`: to download some stuff
 - `tar`: to extract downloaded stuff
-- `zsh`: to actually run the dotfiles
+- `fish`: to actually run the dotfiles
 - `sudo`: some configs may need that
 
 ### Install
@@ -28,8 +25,25 @@ Then, run these steps:
 ```console
 $ git clone https://github.com/yxuko/dotfiles.git ~/.dotfiles
 $ cd ~/.dotfiles
-$ ./dotfiles
-$ zsh # or just close and open your terminal again.
+$ ./dotfiles.fish
 ```
 
 > All changed files will be backed up with a `.backup` suffix.
+
+#### Update
+
+To update, you just need to git pull and run again:
+
+```console
+$ cd ~/.dotfiles
+$ git pull
+$ ./dotfiles.fish
+```
+## Contributing
+
+Feel free to contribute. Pull requests will be automatically
+checked/linted with.
+
+## Thanks
+
+Inspired from [caarlos0's dotfiles](https://github.com/caarlos0/dotfiles.fish) to whom I thank for sharing his dotfiles.

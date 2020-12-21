@@ -6,19 +6,16 @@
     email = AUTHOREMAIL
     helper = GIT_CREDENTIAL_HELPER
 [alias]
+    changed           = show --pretty=\"format:\" --name-only
     co                = checkout
-    promote           = !$ZSH/bin/git-promote
-    wtf               = !$ZSH/bin/git-wtf
-    unpushed-st       = !$ZSH/bin/git-unpushed-stat
+	commend           = commit --amend --no-edit
     count             = shortlog -sn
-    lc                = !$ZSH/bin/git-add-rm-line-count
+    cp-branch-name    = !git rev-parse --abbrev-ref HEAD | pbcopy
+	fm                = fetch-merge
     g                 = grep --break --heading --line-number
     gi                = grep --break --heading --line-number -i
-    changed           = show --pretty=\"format:\" --name-only
-    sync              = !zsh -ic git-sync
-    cp-branch-name    = !git rev-parse --abbrev-ref HEAD | pbcopy
-    delete-local-merged = !zsh -ic git-delete-local-merged
-    add-upstream      = !zsh -ic add-upstream
+	lt                = log --tags --decorate --simplify-by-decoration --oneline
+	please            = push --force-with-lease
 [color]
     diff    = auto
     status  = auto
@@ -31,7 +28,6 @@
     autocrlf          = input
     whitespace        = trailing-space,space-before-tab
     precomposeunicode = true
-    pager             = diff-so-fancy | less --tabs=4 -RFX
 [apply]
     whitespace = nowarn
 [help]
@@ -58,7 +54,3 @@
     oldHighlight = red bold 52
     newNormal = green
     newHighlight = blue bold 22
-[pager]
-    diff = diff-so-fancy | less --tabs=4 -RFX
-    log = diff-so-fancy | less --tabs=4 -RFX
-    show = diff-so-fancy | less --tabs=4 -RFX

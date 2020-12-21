@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env fish
 
 #
 # update sources
@@ -60,15 +60,7 @@ ln -s /usr/bin/nodejs /usr/bin/node
 npm install -g yarn
 npm update -g
 
-yarn add global diff-so-fancy
-yarn add global bower
-yarn add global grunt-cli
-yarn add global grunt-init
 yarn add global yo
-yarn add global np
-yarn add global npm-name
-yarn add global fkill
-yarn add global prettier
 
 # clean downloaded and already installed packages
 apt -v clean
