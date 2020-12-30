@@ -39,6 +39,21 @@ $ cd ~/.dotfiles
 $ git pull
 $ ./dotfiles.fish
 ```
+
+### Recommended Software
+
+- [`starship`](https://starship.rs) ☄🌌️ a minimal, blazing-fast, and infinitely customizable prompt for any shell!
+- [`bat`](https://github.com/sharkdp/bat) a `cat` with wings
+- [`exa`](https://the.exa.website) a modern replacement for `ls`
+- [`fd`](https://github.com/sharkdp/fd) a simple, fast and user-friendly alternative to `find`
+- [`fzf`](https://github.com/junegunn/fzf) for a fuzzy-finder, used in `,t` on vim, for example
+- [`grc`](https://github.com/garabik/grc) to colorize command's outputs
+
+### Themes and Fonts
+
+I am using **[Altair](https://github.com/yxuko/hyper-altair)** for [Hyper](https://hyper.is) and
+**[Source Code Pro Light](https://www.jetbrains.com/lp/mono/)** as a font.
+
 ## Contributing
 
 Feel free to contribute. Pull requests will be automatically
