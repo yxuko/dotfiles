@@ -165,12 +165,6 @@ for installer in */install.fish
 		or fail $installer
 end
 
-for installer in */install.fish
-	$installer
-		and success $installer
-		or fail $installer
-end
-
 if ! grep (command -v fish) /etc/shells
 	command -v fish | sudo tee -a /etc/shells
 		and success 'Added fish to /etc/shells'
