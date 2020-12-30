@@ -126,12 +126,14 @@ function install_dotfiles
 			or fail 'Failed to link config file'
 	end
 
+	link_file $DOTFILES_ROOT/ssh/config $HOME/.ssh/config local
+		or fail ssh
 	link_file $DOTFILES_ROOT/bat/config $HOME/.config/bat/config backup
 		or fail bat
 	link_file $DOTFILES_ROOT/htop/htoprc $HOME/.config/htop/htoprc backup
 		or fail htoprc
-	link_file $DOTFILES_ROOT/ssh/config $HOME/.ssh/config local
-		or fail ssh
+	link_file $DOTFILES_ROOT/starship/starship.toml $HOME/.config/starship.toml
+		or fail starship
 end
 
 function setup_fish

@@ -13,8 +13,9 @@ set -Ux VEDITOR code
 
 set -Ua fish_user_paths $DOTFILES/bin $HOME/.bin
 
-# pure prompt
-set -U PURE_PROMPT_SYMBOL »
+# starship prompt
+# https://github.com/starship/starship#fish
+starship init fish | source
 
 # load up functions
 for f in $DOTFILES/*/functions
