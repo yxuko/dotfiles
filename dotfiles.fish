@@ -90,7 +90,7 @@ function link_file -d "links a file keeping a backup"
             case s
 				set skip true
             case '*'
-                fail 'I told you to choose from [s]kip, [o]verwrite, [b]ackup !'
+                fail 'I told you to choose from [s]kip, [o]verwrite, [b]ackup!'
             end
 
             if test '$overwrite' = "true"
@@ -148,7 +148,7 @@ curl -sL git.io/fisher | source
 	or fail 'Fisher coudn\'t be installed!'
 
 setup_gitconfig
-	and success 'Git Credential has been configured !'
+	and success 'Git Credential has been configured!'
 	or fail 'Git Credential Config Failed!'
 
 install_dotfiles
@@ -173,7 +173,7 @@ if ! grep (command -v fish) /etc/shells
 end
 
 setup_fish
-	and success set (fish --version) has been set as default shell
+	and success (fish --version) has been set as default shell
 	or fail 'Coudn\'t set Fish as default shell'
 
 success 'All done! Dotfiles installed/updated!'
