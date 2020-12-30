@@ -141,7 +141,7 @@ function setup_fish
     end
 end
 
-curl -sL git.io/fisher | source && fisher install jorgebucaran/fisher
+curl -sL git.io/fisher | source
 	and success 'Fisher Installed'
 	or fail 'Fisher coudn\'t be installed!'
 
