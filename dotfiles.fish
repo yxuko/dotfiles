@@ -145,11 +145,11 @@ end
 
 curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
 	and success 'Fisher Installed'
-	or fail 'Fisher coudn\'t be installed!'
+	or fail 'Fisher couldn\'t be installed!'
 	
 curl -fsSL https://starship.rs/install.sh | bash
 	and success 'Starship Installed'
-	or fail 'Starship coudn\'t be installed!'
+	or fail 'Starship couldn\'t be installed!'
 
 setup_gitconfig
 	and success 'Git Credential has been configured!'
@@ -157,7 +157,7 @@ setup_gitconfig
 
 install_dotfiles
 	and success 'Dotfiles Linked!'
-	or fail 'Dotfiles coudn\'t be linked!'
+	or fail 'Dotfiles couldn\'t be linked!'
 
 mkdir -p ~/.config/fish/completions/
 	and success 'Fish completions Prepared'
@@ -178,6 +178,6 @@ end
 
 setup_fish
 	and success (fish --version) has been set as default shell
-	or fail 'Coudn\'t set Fish as default shell'
+	or fail 'couldn\'t set Fish as default shell'
 
 success 'All done! Dotfiles installed/updated!'
