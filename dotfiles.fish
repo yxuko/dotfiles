@@ -146,6 +146,10 @@ end
 curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
 	and success 'Fisher Installed'
 	or fail 'Fisher coudn\'t be installed!'
+	
+curl -fsSL https://starship.rs/install.sh | bash
+	and success 'Starship Installed'
+	or fail 'Starship coudn\'t be installed!'
 
 setup_gitconfig
 	and success 'Git Credential has been configured!'
